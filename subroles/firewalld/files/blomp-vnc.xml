@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>blomp.lab vnc port range</short>
+  <port port="5900-5911" protocol="tcp"/>
+</service>
+
