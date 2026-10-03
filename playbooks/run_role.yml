@@ -1,0 +1,11 @@
+---
+# define target as host or pattern
+#
+# define erole as role to run
+
+
+- hosts: "{{ target }}"
+  roles:
+    - "{{ erole }}"
+
+#- name: run the role
