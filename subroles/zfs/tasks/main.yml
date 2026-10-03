@@ -1,0 +1,33 @@
+---
+
+- name: run updates
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+
+- name: install epel-release
+  ansible.builtin.package:
+    name:
+      - epel-release
+
+- name: install dependencies
+  ansible.builtin.package:
+    name:
+      - kernel-devel
+      - dkms
+    state: latest
+
+- name: install zfs repo
+  ansible.builtin.package:
+    name: "https://zfsonlinux.org/epel/zfs-release-3-0.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: latest
+
+- name: check dkms status
+  ansible.builtin.shell: dkms status | grep -q zfs.*installed
+  register: dkms_status
+  failed_when: dkms_status.rc != 0
+
+#- name: start scrub timer
+#  with_items: zpools
+
+
