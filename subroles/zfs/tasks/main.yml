@@ -28,6 +28,7 @@
   ansible.builtin.shell: dkms status | grep -q zfs.*installed
   register: dkms_status
   failed_when: dkms_status.rc != 0
+  changed_when: false
 
 #- name: start scrub timer
 #  with_items: zpools
