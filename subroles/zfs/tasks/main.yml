@@ -5,21 +5,23 @@
     name: "*"
     state: latest
 
+- name: install zfs repo
+  ansible.builtin.dnf:
+    name: "https://zfsonlinux.org/epel/zfs-release-3-0.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: latest
+    disable_gpg_check: true
+
 - name: install epel-release
   ansible.builtin.package:
     name:
       - epel-release
 
-- name: install dependencies
+- name: install packages
   ansible.builtin.package:
     name:
       - kernel-devel
       - dkms
-    state: latest
-
-- name: install zfs repo
-  ansible.builtin.package:
-    name: "https://zfsonlinux.org/epel/zfs-release-3-0.el{{ ansible_distribution_major_version }}.noarch.rpm"
+      - zfs
     state: latest
 
 - name: check dkms status
