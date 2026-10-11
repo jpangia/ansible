@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# number of copies to save
+num_copies={{ num_copies }}
+
+# borg server variables
+borg_user=blomp_borg
+borg_host=mimic.blomp.lab
+borg_root="/barrel"
+borg_repo="{{ borg_repo }}"
+dir_to_backup="{{ dir_to_backup }}"
+
+
+# populate env variables
+source /root/.borg_env
+
+#################################################
+# {{ target_name }}
+#################################################
+echo "=== Backing up {{ target_name }} ===" | tee -a /var/log/borg.log
+date | tee -a /var/log/borg.log
+
+borg --verbose --progress init -e keyfile ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
+borg --verbose --progress create --stats ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}::$(date +"${borg_repo}-%Y%m%d-%H%M%S") $dir_to_backup
+
+borg --verbose --progress prune --list --keep-last $num_copies ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
+borg --verbose --progress compact ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
+date | tee -a /var/log/borg.log
+echo "=== Done Backing up {{ target_name }} ===" | tee -a /var/log/borg.log
+echo "" | tee -a /var/log/borg.log
+

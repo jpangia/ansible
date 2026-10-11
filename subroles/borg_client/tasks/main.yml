@@ -1,0 +1,10 @@
+---
+
+- name: ensure /root/borg
+
+# purposefully fails if variables not specified
+- name: copy script to /root/borg
+
+- name: copy env.sample to /root/borg
+
+- name: make systemd timer
