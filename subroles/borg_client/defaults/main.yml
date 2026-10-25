@@ -1,0 +1,9 @@
+---
+borg_user: "blomp_borg"
+borg_host: "mimic.blomp.lab"
+borg_root: "/barrel"
+
+# doesn't default:
+## borg_repo
+## dir_to_backup
+## target_name

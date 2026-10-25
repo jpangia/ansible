@@ -1,10 +1,15 @@
 ---
 
-- name: ensure /root/borg
+- name: ensure /opt/{{ borg_user }}
+  # perms borg_user:borg_user 0700
 
 # purposefully fails if variables not specified
-- name: copy script to /root/borg
+- name: copy script to /opt/{{ borg_user }}
+# TODO: figure out if multiple templated services or one backup_all script
+# leaning towards trying to do backup all script, might be squirrelly to make ansible generate it, but better than like 6 systemd files
 
-- name: copy env.sample to /root/borg
+- name: copy env.sample to /opt/{{ borg_user }}/.borg_env
+
+- name: make systemd unit file
 
 - name: make systemd timer
