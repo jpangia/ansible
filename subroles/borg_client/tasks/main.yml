@@ -1,14 +1,12 @@
 ---
 - name: usage
   ansible.builtin.debug:
-  msg: | 
-       "please define the following variables:
-       borg_repo
-       dir_to_backup
-       target_name"
+    msg: | 
+         please define the following variables:
+           borg_repo
+           dir_to_backup
   when: borg_repo is undefined and 
-        dir_to_backup is undefined and
-        target_name is undefined 
+        dir_to_backup is undefined
 
 - name: install borg
   ansible.builtin.package:
@@ -26,17 +24,35 @@
 # purposefully fails if variables not specified
 - name: template files to /root/borg/
   ansible.builtin.template:
-    path: "/root/borg/{{ item }}"
-    state: present
-    source: "{{ item }}.j2"
+    dest: "/root/borg/{{ item }}"
+    src: "{{ item }}.j2"
+    mode: "0600"
   with_items:
-    - "borg_client.sh.j2"
+    - "borg_client.sh"
     - ".borg_env"
     - "give_pass.sh"
  
 # TODO: figure out if multiple templated services or one backup_all script
 # leaning towards trying to do backup all script, might be squirrelly to make ansible generate it, but better than like 6 systemd files
 
-- name: template systemd files
+- name: make scripts executable
+  ansible.builtin.file:
+    dest: "/root/borg/{{ item }}"
+    mode: "0700"
+  with_items:
+    - "borg_client.sh"
+    - "give_pass.sh"
 
-- name: enable and start timer
+- name: template systemd files
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/{{ item }}"
+    src: "{{ item }}.j2"
+  with_items:
+    - "borg_client.timer"
+    - "borg_client.unit"
+
+- name: enable timer
+  ansible.builtin.systemd_service:
+    enabled: true
+    daemon_reload: true
+    name: borg_client.timer

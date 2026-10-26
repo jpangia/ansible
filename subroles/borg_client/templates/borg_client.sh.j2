@@ -15,9 +15,9 @@ dir_to_backup="{{ dir_to_backup }}"
 source /root/borg/.borg_env
 
 #################################################
-# {{ target_name }}
+# {{ borg_repo }}
 #################################################
-echo "=== Backing up {{ target_name }} ===" | tee -a /var/log/borg.log
+echo "=== Backing up {{ borg_repo }} ===" | tee -a /var/log/borg.log
 date | tee -a /var/log/borg.log
 
 borg --verbose --progress init -e keyfile ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
@@ -26,6 +26,6 @@ borg --verbose --progress create --stats ${borg_user}@${borg_host}:${borg_repo_r
 borg --verbose --progress prune --list --keep-last $num_copies ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
 borg --verbose --progress compact ${borg_user}@${borg_host}:${borg_repo_root}/${borg_repo}
 date | tee -a /var/log/borg.log
-echo "=== Done Backing up {{ target_name }} ===" | tee -a /var/log/borg.log
+echo "=== Done Backing up {{ borg_repo }} ===" | tee -a /var/log/borg.log
 echo "" | tee -a /var/log/borg.log
 
