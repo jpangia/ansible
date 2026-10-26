@@ -1,15 +1,42 @@
 ---
+- name: usage
+  ansible.builtin.debug:
+  msg: | 
+       "please define the following variables:
+       borg_repo
+       dir_to_backup
+       target_name"
+  when: borg_repo is undefined and 
+        dir_to_backup is undefined and
+        target_name is undefined 
 
-- name: ensure /opt/{{ borg_user }}
-  # perms borg_user:borg_user 0700
+- name: install borg
+  ansible.builtin.package:
+    name: borgbackup
+    state: latest
+
+- name: ensure /root/borg
+  ansible.builtin.file:
+    path: /root/borg
+    owner: root
+    group: root
+    mode: "0700"
+    state: directory
 
 # purposefully fails if variables not specified
-- name: copy script to /opt/{{ borg_user }}
+- name: template files to /root/borg/
+  ansible.builtin.template:
+    path: "/root/borg/{{ item }}"
+    state: present
+    source: "{{ item }}.j2"
+  with_items:
+    - "borg_client.sh.j2"
+    - ".borg_env"
+    - "give_pass.sh"
+ 
 # TODO: figure out if multiple templated services or one backup_all script
 # leaning towards trying to do backup all script, might be squirrelly to make ansible generate it, but better than like 6 systemd files
 
-- name: copy env.sample to /opt/{{ borg_user }}/.borg_env
+- name: template systemd files
 
-- name: make systemd unit file
-
-- name: make systemd timer
+- name: enable and start timer

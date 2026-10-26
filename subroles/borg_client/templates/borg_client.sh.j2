@@ -4,15 +4,15 @@
 num_copies={{ num_copies }}
 
 # borg server variables
-borg_user=blomp_borg
-borg_host=mimic.blomp.lab
+borg_user="{{ borg_user }}"
+borg_host="{{ borg_host }}"
 borg_root="/barrel"
 borg_repo="{{ borg_repo }}"
 dir_to_backup="{{ dir_to_backup }}"
 
 
 # populate env variables
-source /opt/$borg_user/.borg_env
+source /root/borg/.borg_env
 
 #################################################
 # {{ target_name }}
