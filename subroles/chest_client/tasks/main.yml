@@ -1,0 +1,22 @@
+---
+
+- name: install packages
+  ansible.builtin.package:
+    name: "nfs-utils"
+    state: "latest"
+
+- name: add mount to fstab
+  ansible.builtin.lineinfile:
+    path: "/etc/fstab"
+    line: "10.0.0.220:/chest/immich                  /immich                 nfs     defaults        0 0"
+
+- name: daemon reload
+  ansible.builtin.shell: "systemctl daemon-reload"
+  register: daemon_reload
+  failed_when: daemon_reload.rc != 0
+  changed_when: false
+
+- name: remount
+  ansible.builtin.shell: "mount -a"
+  register: mount_a
+  failed_when: mount_a.rc != 0
