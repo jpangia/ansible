@@ -1,0 +1,30 @@
+---
+
+- name: install packages
+  ansible.builtin.package:
+    name: nfs-utils
+
+- name: start nfs-server
+  ansible.builtin.systemd_service:
+    name: "nfs-server.service"
+    enabled: true
+    state: "started"
+
+- name: ensure exports
+  ansible.builtin.template:
+    src: "nfs_exports.j2"
+    dest: "/etc/exports"
+    backup: true
+
+- name: add firewall rule
+  ansible.posix.firewalld:
+    service: "nfs"
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: exportfs
+  ansible.builtin.shell: "exportfs -a"
+  register: exportfs_a
+  failed_when: exportfs_a.rc != 0
+  changed_when: false
