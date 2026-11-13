@@ -2,7 +2,10 @@ all:
   children:
     kvm:
       hosts:
-        mimic:
+        mimic.blomp.lab:
     storage:
       hosts:
-        mimic:
+        mimic.blomp.lab:
+    vms:
+      hosts:
+        immich.blomp.lab:
