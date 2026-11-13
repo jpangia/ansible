@@ -1,0 +1,20 @@
+---
+
+- name: install dnf-automatic
+  ansible.builtin.package:
+    name: "dnf-automatic"
+    state: "latest"
+
+- name: modify dnf-automatic config
+  ansible.builtin.lineinfile:
+    path: "/etc/dnf/automatic.conf"
+    create: false # just to be explicit
+    state: "present"
+    search_string: "apply_updates = no"
+    line: "apply_updates = yes"
+
+- name: enable dnf-automatic.timer
+  ansible.builtin.systemd_service:
+    name: "dnf-automatic.timer"
+    state: "started"
+    enabled: "true"
