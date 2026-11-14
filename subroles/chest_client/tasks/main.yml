@@ -9,6 +9,8 @@
   ansible.builtin.lineinfile:
     path: "/etc/fstab"
     line: "10.0.0.220:/chest/immich                  /immich                 nfs     defaults        0 0"
+#    line: "10.0.0.220:/chest/immich                  /immich                 nfs     bg,async,automount,nolock        0 0
+"
 
 - name: daemon reload
   ansible.builtin.shell: "systemctl daemon-reload"
