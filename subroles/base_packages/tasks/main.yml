@@ -1,0 +1,7 @@
+---
+- name: packages
+  ansible.builtin.package:
+    name:
+      - vim
+      - tmux
+    state: present
