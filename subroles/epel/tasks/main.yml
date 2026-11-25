@@ -1,0 +1,11 @@
+---
+- name: install epel
+  ansible.builtin.package:
+    name: epel-release
+    state: present
+
+- name: enable crb
+  ansible.builtin.shell: crb enable
+  register: crb_result
+  changed_when: false
+  failed_when: crb_result.rc != 0
