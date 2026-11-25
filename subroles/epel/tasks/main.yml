@@ -9,3 +9,6 @@
   register: crb_result
   changed_when: false
   failed_when: crb_result.rc != 0
+
+#- name: import epel GPG key
+# TODO
